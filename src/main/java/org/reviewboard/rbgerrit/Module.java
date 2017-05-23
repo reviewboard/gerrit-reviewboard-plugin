@@ -1,6 +1,7 @@
 package org.reviewboard.rbgerrit;
 
 import static com.google.gerrit.server.project.CommitResource.COMMIT_KIND;
+import static com.google.gerrit.server.project.BranchResource.PROJECT_KIND;
 
 import com.google.gerrit.extensions.restapi.RestApiModule;
 import com.google.inject.AbstractModule;
@@ -21,6 +22,7 @@ public class Module extends AbstractModule {
             @Override
             protected void configure() {
                 get(COMMIT_KIND, "diff").to(DiffResource.class);
+                get(PROJECT_KIND, "all-commits").to(CommitListResource.class);
             }
         });
     }
