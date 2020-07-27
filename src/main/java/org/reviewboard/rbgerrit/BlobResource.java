@@ -1,7 +1,7 @@
 package org.reviewboard.rbgerrit;
 
 import com.google.gerrit.extensions.restapi.*;
-import com.google.gerrit.server.project.ProjectControl;
+import com.google.gerrit.reviewdb.client.Project.NameKey;
 import com.google.gerrit.server.project.ProjectResource;
 import com.google.inject.TypeLiteral;
 import org.eclipse.jgit.lib.ObjectId;
@@ -39,12 +39,20 @@ public class BlobResource implements RestResource {
         this.objectId = objectId;
     }
 
+//    /**
+//     * Return the project's access control management.
+//     * @return The project's access control management.
+//     */
+//    public ProjectControl getProjectControl() {
+//        return projectResource.getControl();
+//    }
+
     /**
      * Return the project's access control management.
      * @return The project's access control management.
      */
-    public ProjectControl getProjectControl() {
-        return projectResource.getControl();
+    public NameKey getProjectNameKey() {
+        return projectResource.getProjectState().getNameKey();
     }
 
     /**

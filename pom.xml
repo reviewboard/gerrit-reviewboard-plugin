@@ -6,12 +6,12 @@
 
     <groupId>org.beanbag</groupId>
     <artifactId>gerrit-reviewboard-plugin</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
         <Gerrit-ApiType>plugin</Gerrit-ApiType>
-        <Gerrit-ApiVersion>2.13</Gerrit-ApiVersion>
+        <Gerrit-ApiVersion>2.16</Gerrit-ApiVersion>
     </properties>
 
     <build>
@@ -62,7 +62,7 @@
     <repositories>
         <repository>
             <id>maven.org</id>
-            <url>http://repo1.maven.org/maven2</url>
+            <url>https://repo1.maven.org/maven2</url>
         </repository>
     </repositories>
 </project>

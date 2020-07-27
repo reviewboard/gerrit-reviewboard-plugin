@@ -18,17 +18,17 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.filter.AndRevFilter;
 import org.eclipse.jgit.revwalk.filter.MaxCountRevFilter;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 import org.kohsuke.args4j.Option;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 
@@ -85,7 +85,7 @@ public class CommitListResource implements RestReadView<ProjectResource> {
      */
     @Override
     public Response<Collection<CommitInfo>> apply(final ProjectResource parentResource) throws RestApiException {
-        final Project.NameKey projectName = parentResource.getControl().getProject().getNameKey();
+        final Project.NameKey projectName = parentResource.getNameKey();
 
         try (final Repository repository = repoManager.openRepository(projectName)) {
             final ObjectId startId = repository.resolve(String.format("%s^{commit}", start));
@@ -110,7 +110,7 @@ public class CommitListResource implements RestReadView<ProjectResource> {
      * Information about a single commit.
      */
     public static class CommitInfo {
-        private static final DateTimeFormatter formatter = ISODateTimeFormat.dateTimeNoMillis();
+        private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
         public final String message;
         public final String revision;
         public final String author;
@@ -125,7 +125,8 @@ public class CommitListResource implements RestReadView<ProjectResource> {
             assert commit.getParentCount() == 1;
 
             final PersonIdent ident = commit.getAuthorIdent();
-            time = new DateTime(ident.getWhen(), DateTimeZone.forTimeZone(ident.getTimeZone())).toString(formatter);
+            ZonedDateTime zdt =  ZonedDateTime.ofInstant(ident.getWhen().toInstant(),ident.getTimeZone().toZoneId());
+            time = formatter.format(zdt);
             message = commit.getFullMessage();
             revision = commit.getId().getName();
             author = ident.getName();
