@@ -53,7 +53,7 @@ public class BlobsCollection implements ChildCollection<ProjectResource, BlobRes
      */
     @Override
     public BlobResource parse(final ProjectResource parentResource, final IdString id) throws RestApiException {
-        final Project.NameKey projectName = parentResource.getControl().getProject().getNameKey();
+        final Project.NameKey projectName = parentResource.getProjectState().getNameKey();;
 
         try (final Repository repository = repoManager.openRepository(projectName)) {
             final ObjectId objId = repository.resolve(String.format("%s^{blob}", id.get()));

@@ -52,7 +52,7 @@ public class GetBlobContent implements RestReadView<BlobResource> {
      */
     @Override
     public BinaryResult apply(final BlobResource parentResource) throws RestApiException {
-        final Project.NameKey projectName = parentResource.getProjectControl().getProject().getNameKey();
+        final Project.NameKey projectName = parentResource.getProjectNameKey();
         try (final Repository repository = repoManager.openRepository(projectName)) {
             final ObjectLoader loader = repository.open(parentResource.getObjectId(), OBJ_BLOB);
             BinaryResult result;
