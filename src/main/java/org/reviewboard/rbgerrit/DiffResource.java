@@ -44,7 +44,7 @@ public class DiffResource implements RestReadView<CommitResource> {
      */
     @Override
     public BinaryResult apply(final CommitResource parentResource) throws RestApiException {
-        final Project.NameKey projectName = parentResource.getProject().getProject().getNameKey();
+        final Project.NameKey projectName = parentResource.getProjectState().getProject().getNameKey();
         final RevCommit commit = parentResource.getCommit();
         final int parentCount = commit.getParentCount();
 
