@@ -1,7 +1,7 @@
 package org.reviewboard.rbgerrit;
 
 import com.google.gerrit.extensions.restapi.*;
-import com.google.gerrit.reviewdb.client.Project.NameKey;
+import com.google.gerrit.entities.Project.NameKey;
 import com.google.gerrit.server.project.ProjectResource;
 import com.google.inject.TypeLiteral;
 import org.eclipse.jgit.lib.ObjectId;

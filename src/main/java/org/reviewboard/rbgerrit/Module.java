@@ -1,7 +1,7 @@
 package org.reviewboard.rbgerrit;
 
 import static com.google.gerrit.server.project.CommitResource.COMMIT_KIND;
-import static com.google.gerrit.server.project.BranchResource.PROJECT_KIND;
+import static com.google.gerrit.server.project.ProjectResource.PROJECT_KIND;
 import static org.reviewboard.rbgerrit.BlobResource.BLOB_KIND;
 
 import com.google.gerrit.extensions.registration.DynamicMap;

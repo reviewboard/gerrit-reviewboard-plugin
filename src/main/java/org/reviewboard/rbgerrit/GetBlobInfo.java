@@ -1,5 +1,6 @@
 package org.reviewboard.rbgerrit;
 
+import com.google.gerrit.extensions.restapi.Response;
 import com.google.gerrit.extensions.restapi.RestReadView;
 
 
@@ -16,8 +17,8 @@ public class GetBlobInfo implements RestReadView<BlobResource> {
      * @return Information about the object ID.
      */
     @Override
-    public BlobInfo apply(final BlobResource parentResource) {
-        return new BlobInfo(parentResource);
+    public Response<BlobInfo> apply(final BlobResource parentResource) {
+        return Response.ok(new BlobInfo(parentResource));
     }
 
     /**

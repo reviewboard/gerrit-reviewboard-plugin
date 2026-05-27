@@ -1,9 +1,11 @@
 package org.reviewboard.rbgerrit;
 
+import com.google.gerrit.extensions.restapi.BadRequestException;
 import com.google.gerrit.extensions.restapi.BinaryResult;
+import com.google.gerrit.extensions.restapi.Response;
 import com.google.gerrit.extensions.restapi.RestApiException;
 import com.google.gerrit.extensions.restapi.RestReadView;
-import com.google.gerrit.reviewdb.client.Project;
+import com.google.gerrit.entities.Project;
 import com.google.gerrit.server.git.GitRepositoryManager;
 import com.google.gerrit.server.project.CommitResource;
 import com.google.inject.Inject;
@@ -43,25 +45,25 @@ public class DiffResource implements RestReadView<CommitResource> {
      *                          parents) is given.
      */
     @Override
-    public BinaryResult apply(final CommitResource parentResource) throws RestApiException {
+    public Response<BinaryResult> apply(final CommitResource parentResource) throws RestApiException {
         final Project.NameKey projectName = parentResource.getProjectState().getProject().getNameKey();
         final RevCommit commit = parentResource.getCommit();
         final int parentCount = commit.getParentCount();
 
         if (parentCount == 0) {
-            throw new RestApiException("Cannot retrieve diff of commits with 0 parents.");
+            throw new BadRequestException("Cannot retrieve diff of commits with 0 parents.");
         } else if (parentCount > 1) {
-            throw new RestApiException("Cannot retrieve diff of commit with multiple parents.");
+            throw new BadRequestException("Cannot retrieve diff of commit with multiple parents.");
         }
 
         try (final Repository repository = repoManager.openRepository(projectName)) {
-            return BinaryResult
+            return Response.ok(BinaryResult
                 .create(diff(repository, commit))
-                .setContentType(DIFF_MIMETYPE);
+                .setContentType(DIFF_MIMETYPE));
         } catch (final IOException e) {
             log.error(String.format("Error reading git repository for project '%s': %s", projectName.get(), e), e);
 
-            throw new RestApiException(String.format("Could not retrieve diff: %s", e.toString()));
+            throw RestApiException.wrap(String.format("Could not retrieve diff: %s", e.toString()), e);
         }
     }
 

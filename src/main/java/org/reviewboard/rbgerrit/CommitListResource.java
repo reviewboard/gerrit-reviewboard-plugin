@@ -4,7 +4,7 @@ import com.google.gerrit.extensions.restapi.ResourceNotFoundException;
 import com.google.gerrit.extensions.restapi.Response;
 import com.google.gerrit.extensions.restapi.RestApiException;
 import com.google.gerrit.extensions.restapi.RestReadView;
-import com.google.gerrit.reviewdb.client.Project;
+import com.google.gerrit.entities.Project;
 import com.google.gerrit.server.git.GitRepositoryManager;
 import com.google.gerrit.server.project.ProjectResource;
 import com.google.inject.Inject;
@@ -102,7 +102,7 @@ public class CommitListResource implements RestReadView<ProjectResource> {
         } catch (final IOException e) {
             log.error(String.format("Error reading git repository for project '%s': %s", projectName.get(), e), e);
 
-            throw new RestApiException("Error reading repository: " + e.toString());
+            throw RestApiException.wrap("Error reading repository: " + e.toString(), e);
         }
     }
 

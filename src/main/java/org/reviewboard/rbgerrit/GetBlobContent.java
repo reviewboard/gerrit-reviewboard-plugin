@@ -3,7 +3,7 @@ package org.reviewboard.rbgerrit;
 import static org.eclipse.jgit.lib.Constants.OBJ_BLOB;
 
 import com.google.gerrit.extensions.restapi.*;
-import com.google.gerrit.reviewdb.client.Project;
+import com.google.gerrit.entities.Project;
 import com.google.gerrit.server.git.GitRepositoryManager;
 import com.google.inject.Inject;
 import org.eclipse.jgit.errors.LargeObjectException;
@@ -51,7 +51,7 @@ public class GetBlobContent implements RestReadView<BlobResource> {
      *                          the blob content.
      */
     @Override
-    public BinaryResult apply(final BlobResource parentResource) throws RestApiException {
+    public Response<BinaryResult> apply(final BlobResource parentResource) throws RestApiException {
         final Project.NameKey projectName = parentResource.getProjectNameKey();
         try (final Repository repository = repoManager.openRepository(projectName)) {
             final ObjectLoader loader = repository.open(parentResource.getObjectId(), OBJ_BLOB);
@@ -69,14 +69,14 @@ public class GetBlobContent implements RestReadView<BlobResource> {
                 };
             }
 
-            return result
+            return Response.ok(result
                 .setContentLength(loader.getSize())
                 .setContentType("application/octet-stream")
-                .base64();
+                .base64());
         } catch (final IOException e) {
             log.error(String.format("Error reading git repository for project '%s': %s", projectName.get(), e), e);
 
-            throw new RestApiException("Could not read repository: " + e.toString());
+            throw RestApiException.wrap("Could not read repository: " + e.toString(), e);
         }
     }
 }
